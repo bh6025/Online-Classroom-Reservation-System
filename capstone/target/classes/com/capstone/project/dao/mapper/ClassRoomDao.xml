@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.project.dao.ClassRoomDao">
+	<select id="getClassRoomDao" resultType="com.capstone.project.dto.ClassRoomDto">
+		select distinct(buildingName), classRoomName, classRoomSize from classRoom where buildingName=#{param1} and classRoomSize=#{param2} and classRoomName=#{param3}
+	</select>
+	
+	<select id="getRoomDao" resultType="com.capstone.project.dto.ClassRoomDto">
+ 		SELECT distinct buildingName, classRoomName, classRoomSize
+		FROM classroom 
+  		WHERE buildingName in
+ 		<foreach item="item" index="index" collection="buildingName"
+      		open="(" separator="," close=")">
+        	#{item}
+  		</foreach>
+  		and classRoomSize in
+  		<foreach item="item" index="index" collection="classRoomSize"
+      		open="(" separator="," close=")">
+        	#{item}
+  		</foreach>	
+  		order by buildingName, classRoomName asc 
+	</select>
+	
+	<select id="getRecommendDao" resultType="com.capstone.project.dto.ClassRoomDto">
+		SELECT reservation.buildingName, reservation.classRoomName, classRoomSize
+		FROM reservation, classroom
+  		WHERE userID in (select userID from user where major=#{param1})
+  		and reservation.buildingName in
+ 		<foreach item="item" index="index" collection="buildingName"
+      		open="(" separator="," close=")">
+        	#{item}
+  		</foreach>
+  		and reservation.classRoomName in (select classRoomName from classroom where classRoomSize in
+  		<foreach item="item" index="index" collection="classRoomSize"
+      		open="(" separator="," close=")">
+        	#{item}
+  		</foreach>	
+  		)
+  		group by reservation.buildingName order by count(reservation.buildingName) desc limit 5;
+	</select>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.project.dao.AdminReservationDao">
+
+	<select id="getProcessingRecordDao" resultType="com.capstone.project.dto.ReservationAndUserDto">
+		select * FROM reservation,user where reservation.userID=user.userID and approvalInfo="승인 요청중" order by reservationTime
+	</select>
+
+	<select id="getAllRecordDao" resultType="com.capstone.project.dto.ReservationAndUserDto">
+		select * FROM reservation,user where reservation.userID=user.userID order by reservationTime
+	</select>
+	
+	<update id="approveReservation">
+		update reservation set approvalInfo='승인' where userID=#{param1} and buildingName=#{param2} and classRoomName=#{param3} and reservationTime=#{param4};
+	</update>
+	
+	<update id="rejectReservation">
+		update reservation set approvalInfo='거절', adminReason=#{param5} where userID=#{param1} and buildingName=#{param2} and classRoomName=#{param3} and reservationTime=#{param4};
+	</update>
+</mapper>

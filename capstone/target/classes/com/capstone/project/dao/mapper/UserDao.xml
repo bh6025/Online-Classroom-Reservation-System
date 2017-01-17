@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.project.dao.UserDao">
+	<select id="listDao" resultType="com.capstone.project.dto.UserDto">
+		SELECT * FROM USER
+	</select>
+	
+	<insert id="createUserDao">
+		INSERT INTO USER VALUES (#{param1}, #{param2}, #{param3}, #{param4}, #{param5}, #{param6}, #{param7}, #{param8}, #{param9}, #{param10})
+	</insert>
+	
+	<select id="loginDao" resultType="int">
+		select count(*) from user where userID=#{param1} and userPW=#{param2}
+	</select>
+	
+	<select id="findIDDao" resultType="String">
+		select userID from user where name=#{param1} and studentNum=#{param2} and email=#{param3} 
+	</select>
+	
+	<select id="findPWDao" resultType="String">
+		select userPW from user where userID=#{param1} and question=#{param2} and answer=#{param2}
+	</select>
+	
+	<select id="getUserInfoDao" resultType="com.capstone.project.dto.UserDto">
+		select * from user where userID=#{param1}
+	</select>
+	
+	<update id="modifyUserDao">
+		update user set userPW=#{param1}, major=#{param2}, email=#{param3}, tel=#{param4}, question=#{param5}, answer=#{param6} where userID=#{param7};
+	</update>
+	
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.capstone.project.dao.ReservationDao">
+	<select id="getStudentRecordDao" resultType="com.capstone.project.dto.ReservationDto">
+		SELECT buildingName, classRoomName, reservationTime, approvalInfo FROM reservation where userID=#{param1}
+	</select>
+
+	<select id="getOneClickDao" resultType="com.capstone.project.dto.ReservationDto">
+		select distinct buildingName, classRoomName from reservation where userID=#{param1} order by reservationTime desc limit 3;
+	</select>
+	
+	<delete id="deleteReservation">
+		DELETE FROM reservation WHERE reservationTime = #{param1}
+	</delete>
+	
+	<select id="getTimeTableDao" resultType="String">
+		select distinct(reservationTime) from reservation where buildingName=#{param1} and classRoomName=#{param2} and date(reservationTime)=#{param3} and approvalInfo='승인';
+	</select>
+	
+	<select id = "getProcessingRecordDao" resultType="com.capstone.project.dto.ReservationDto">
+		select * FROM reservation where approvalInfo="승인 요청중" order by reservationTime
+	</select>
+
+	<insert id = "insertReservation">
+		INSERT INTO reservation VALUES (#{param1}, #{param2}, #{param3}, #{param4}, "승인 요청중", #{param5}, "")
+	</insert>
+</mapper>
